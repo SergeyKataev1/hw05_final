@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Yatube{% endblock %}
+{% load thumbnail %}
+{% block content %}
+  <h1>Последние обновления на сайте</h1>
+  {% include 'posts/includes/switcher.html' %}
+  {% load cache %}
+      {% cache 20 index_page with page_obj %}
+      {% for post in page_obj %}
+      <article>
+        <ul>
+          <li>
+            Автор: {{ post.author.get_full_name }}
+          </li>
+          <li>
+            Группа: {{ post.group }}
+          </li>
+          <li>
+            Дата публикации: {{ post.pub_date|date:"D E Y" }}
+          </li>
+        </ul>
+      {% thumbnail post.image '960x339' crop='center' upscale=True as im %}
+        <img class="card-img my-2" src="{{ im.url }}">
+      {% endthumbnail %}  
+      <p>{{ post.text|linebreaksbr }}</p>
+      {% if post.group %}
+      <a href="{% url 'posts:group_list' post.group.slug %}">Все записи группы {{ post.group.title }}</a>
+      {% endif %}
+      </article>
+      {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+      {% endcache %}
+    {% include 'posts/includes/paginator.html' %}
+{% endblock %}
