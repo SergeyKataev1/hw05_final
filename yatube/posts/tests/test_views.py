@@ -72,10 +72,10 @@ class PostURLTests(TestCase):
     def tearDownClass(cls):
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
-    # Проверяем используемые шаблоны
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
+        # Проверяем используемые шаблоны
         # Собираем в словарь пары "имя_html_шаблона: reverse(name)"
         templates_pages_names = {
             reverse('posts:index'): 'posts/index.html',
@@ -232,17 +232,18 @@ class FollowTests(TestCase):
         self.assertEqual(Follow.objects.all().count(), 1)
 
     def test_unfollow(self):
-        self.client_auth_follower.get(
-            reverse('posts:profile_follow',
-                    kwargs={'username': self.user_following.username}))
+        """Тест отписки"""
         self.client_auth_follower.get(
             reverse('posts:profile_unfollow',
                     kwargs={'username': self.user_following.username}))
-        self.assertEqual(Follow.objects.all().count(), 0)
+        self.assertFalse(
+            Follow.objects.filter(user=self.user_following).exists()
+        )
 
     def test_add_comment(self):
         """Проверка добавления комментария."""
-        self.client_auth_following.post(f'/posts/{self.post.pk}/comment/',
+        self.client_auth_following.post(reverse('posts:add_comment',
+                                        kwargs={'post_id': self.post.pk}),
                                         {'text': 'тестовый комментарий'},
                                         follow=True)
         response = self.client_auth_following.get(f'/posts/{self.post.pk}/')

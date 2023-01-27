@@ -129,20 +129,20 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    # Подписаться на автора
+    """Подписаться на автора"""
     user = request.user
     author = User.objects.get(username=username)
-    is_follower = Follow.objects.filter(user=user, author=author)
-    if user != author and not is_follower.exists():
+    is_follower_exist = Follow.objects.filter(user=user, author=author)
+    if user != author and not is_follower_exist.exists():
         Follow.objects.create(user=user, author=author)
     return redirect(reverse('posts:profile', args=[username]))
 
 
 @login_required
 def profile_unfollow(request, username):
-    # Отписаться от автора
+    """Отписаться от автора"""
     author = get_object_or_404(User, username=username)
-    is_follower = Follow.objects.filter(user=request.user, author=author)
-    if is_follower.exists():
-        is_follower.delete()
+    is_follower_exist = Follow.objects.filter(user=request.user, author=author)
+    if is_follower_exist.exists():
+        is_follower_exist.delete()
     return redirect('posts:profile', username=author)
