@@ -246,12 +246,15 @@ class FollowTests(TestCase):
                                         kwargs={'post_id': self.post.pk}),
                                         {'text': 'тестовый комментарий'},
                                         follow=True)
-        response = self.client_auth_following.get(f'/posts/{self.post.pk}/')
+        response = self.client_auth_following.get(reverse('posts:post_detail',
+                                                  kwargs={'post_id': self.post.pk}))
         self.assertContains(response, 'тестовый комментарий')
         self.client_auth_following.logout()
         # Комментарий от гостя
-        self.client_auth_following.post(f'/posts/{self.post.pk}/comment/',
+        self.client_auth_following.post(reverse('posts:add_comment',
+                                        kwargs={'post_id': self.post.pk}),
                                         {'text': 'комментарий от гостя'},
                                         follow=True)
-        response = self.client_auth_following.get(f'/posts/{self.post.pk}/')
+        response = self.client_auth_following.get(reverse('posts:post_detail',
+                                                  kwargs={'post_id': self.post.pk}))
         self.assertNotContains(response, 'комментарий от гостя')
