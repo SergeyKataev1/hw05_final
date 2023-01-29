@@ -132,8 +132,9 @@ def profile_follow(request, username):
     """Подписаться на автора"""
     user = request.user
     author = get_object_or_404(User, username=username)
-    follower_exist = Follow.objects.filter(user=user, author=author)
-    if user != author and not follower_exist.exists():
+    follower_obj = Follow.objects.filter(user=user, author=author)
+    # Придумывать названия переменным сплошное мучение :)
+    if user != author and not follower_obj.exists():
         Follow.objects.create(user=user, author=author)
     return redirect(reverse('posts:profile', args=[username]))
 
@@ -142,7 +143,7 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     """Отписаться от автора"""
     author = get_object_or_404(User, username=username)
-    follower_exist = Follow.objects.filter(user=request.user, author=author)
-    if follower_exist.exists():
-        follower_exist.delete()
+    follower_obj = Follow.objects.filter(user=request.user, author=author)
+    if follower_obj.exists():
+        follower_obj.delete()
     return redirect('posts:profile', username=author)
