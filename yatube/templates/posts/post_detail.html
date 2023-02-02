@@ -41,9 +41,9 @@
       </div>
   <!-- Форма добавления комментария -->
 {% load user_filters %}
-
 {% if user.is_authenticated %}
-<div class="card my-4">
+<div class="container py-2">
+<div class="card my-2">
   <h5 class="card-header">Добавить комментарий:</h5>
   <div class="card-body">
     <form method="post" action="{% url 'posts:add_comment' post.pk %}">
@@ -55,11 +55,11 @@
     </form>
   </div>
 </div>
+</div>
 {% endif %}
-
 {% for comment in comments %}
-<div class="media mb-4">
-  <div class="media-body">
+<div class="container py-2">
+  <div class="card-body">
     <h5 class="mt-0">
       <a href="{% url 'posts:profile' comment.author.username %}">
         {{ comment.author.username }}
