@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Профайл пользователя {{  author  }}{% endblock title %}
+{% block title %}Профайл пользователя {{ author }}{% endblock title %}
 {% load thumbnail %}
 {% block content %}
-    <h1>Все посты пользователя: {{  author  }}</h1>
-    <h3>Всего постов: {{  author.posts.all.count  }}</h3>
+    <h1>Все посты пользователя: {{ author }}</h1>
+    <h3>Всего постов: {{ author.posts.all.count }}</h3>
     {% if following %}
 <a
   class="btn btn-lg btn-light"
@@ -34,6 +34,7 @@
         {% endthumbnail %}
         <p>{{ post.text|linebreaksbr }}</p>
         </article>
+        <a href="{% url 'posts:post_detail' post.pk %}">Открыть пост</a>
     {% if not forloop.last %}<hr>{% endif %}
   {% endfor %}
   {% include 'posts/includes/paginator.html' %}
