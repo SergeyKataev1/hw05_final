@@ -10,7 +10,10 @@
       <article>
         <ul>
           <li>
-            Автор: <a href="{% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a>
+            Пользователь: <a href="{% url 'posts:profile' post.author %}">{{ post.author.username }}</a>
+          </li>
+          <li>
+            Автор: {{ post.author.get_full_name }}
           </li>
           <li>
             Группа: {{ post.group }}
